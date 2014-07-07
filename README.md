@@ -57,6 +57,39 @@ LoadModule auth_user_module modules/mod_auth_user.so
 
 Now accessing http://localhost:8080/, you should see your WordPress blog.
 
+Here's the same example using a Dockerfile to create a new image, using this
+image as the base image:
+
+``` docker
+FROM       d11wtq/php:latest
+MAINTAINER Your Name
+
+ADD /path/to/wordpress /www/htdocs
+ADD /path/to/conf.d    /www/httpd.conf.d
+```
+
+Now build the new image:
+
+```
+docker build --rm -t your-wordpress .
+```
+
+And run it with:
+
+```
+# Start MySQL somewhere
+docker run -d  \
+  --name mysql \
+  your-mysql-container
+
+# Start Wordpress, linking to MySQL
+docker run -d        \
+  --name wordpress   \
+  -p 8080:8080       \
+  --link mysql:mysql \
+  your-wordpress
+```
+
 You should be able to provide most needed configuration using this layout.
 
 ### Command Line Access
