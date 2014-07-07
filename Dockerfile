@@ -33,6 +33,7 @@ RUN cd /tmp;                                                      \
     cd php-*;                                                     \
     ./configure                                                   \
       --prefix=/usr/local                                         \
+      --with-config-file-path=/www                                \
       --with-apxs2=/usr/local/bin/apxs                            \
       --with-openssl                                              \
       --with-curl                                                 \
