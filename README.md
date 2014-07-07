@@ -52,7 +52,7 @@ index.php from WordPress. The contents of /path/to/conf.d/ would be a file
 named mod_auth_user.conf, with the contents:
 
 ``` apache
-LoadModule auth_user_module modules/mod_auth_user.so"
+LoadModule auth_user_module modules/mod_auth_user.so
 ```
 
 Now accessing http://localhost:8080/, you should see your WordPress blog.
