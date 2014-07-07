@@ -1,5 +1,7 @@
 # PHP + Apache Docker Container
 
+> In the same manner is LAMP, MAMP and WAMP, I should have called this DAMP.
+
 **WORK IN PROGRESS, DO NOT USE**
 
 This is a docker container for running PHP 5 applications under Apache 2. It is
@@ -7,28 +9,53 @@ designed to be very minimal, but in such a way that extending it is easy.
 Apache listens on port 8080 inside the container and runs in the foreground
 under a non-privileged user.
 
+All the 'standard' PHP extensions are compiled, which basically means you can
+use MySQL, PgSQL, SQLite3, GD etc without doing anything special.
+
 ## Usage
 
 Apache is run in the foreground with a minimal config that can be found at in
 the [www/](https://github.com/d11wtq/php-docker/blob/master/www) directory of
 the GitHub repository for this container.
 
+### Testing
+
+Without any special configuration, the index page will serve up the `phpinfo()`
+output. This should demonstrate that the container is working correctly.
+
+```
+docker run -p 8080:8080 d11wtq/php
+```
+
+Accessing http://localhost:8080/ should show the PHP Info page and Apache logs
+should be written to stdout.
+
 ### Configuration
 
-The document root is set to /www/htdocs and you are expected to mount this
-directory as a volume, or add it to container, using this as the base image.
+The document root is set to /www/htdocs/ and you are expected to mount this
+directory as a volume, or add it to the container, using this image as the base
+image.
 
-Extending the basic Apache 2 configuration (which is intentionally very
-minimal) can be done by adding \*.conf files to /www/httpd.conf.d/, again
-either by mounting a volume, or by using this image as a base image.
+The main httpd.conf file resides in /www/httpd.conf, however it only loads some
+essential modules in order for Apache to function.
+
+Extending the basic Apache 2 configuration can be done by adding \*.conf files
+to /www/httpd.conf.d/, again either by mounting a volume, or by using this
+image as a base image.
+
+The main php.ini file resides in /www/php.ini, though it is kept to a minimum.
 
 Extending the PHP configuration can be done by adding \*.ini files to
-/www/php.ini.d/ via the same means. The default configuration is both minimal
-and strict.
+/www/php.ini.d/ using a volume, or by using this image as a base image. The
+default configuration is both minimal and strict.
+
+If you know what's you're doing, feel free to mount the entire /www/ directory
+as a volume and disregard the above, but make sure it contains at least an
+httpd.conf.
 
 ### Web Access
 
-Here's an example of serving a WordPress blog with mod_auth_user loaded,  using
+Here's an example of serving a WordPress blog with mod_rewrite loaded, using
 shared volumes.
 
 ```
@@ -49,13 +76,14 @@ docker run -d                          \
 
 The contents of /path/to/wordpress/ would be the directory including the
 index.php from WordPress. The contents of /path/to/conf.d/ would be a file
-named mod_auth_user.conf, with the contents:
+named mod_rewrite.conf, with the contents:
 
 ``` apache
-LoadModule auth_user_module modules/mod_auth_user.so
+LoadModule rewrite_module modules/mod_rewrite.so
 ```
 
-Now accessing http://localhost:8080/, you should see your WordPress blog.
+Now accessing http://localhost:8080/, you should see your WordPress blog,
+assuming it accesses MySQL on the hostname 'mysql'.
 
 Here's the same example using a Dockerfile to create a new image, using this
 image as the base image:
@@ -100,3 +128,5 @@ container:
 ```
 docker run -ti d11wtq/php /bin/bash
 ```
+
+The same configuration file is used for the CLI as for Apache.
