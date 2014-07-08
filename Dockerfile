@@ -34,6 +34,7 @@ RUN cd /tmp;                                                      \
     ./configure                                                   \
       --prefix=/usr/local                                         \
       --with-config-file-path=/www                                \
+      --with-config-file-scan-dir=/www/php.ini.d/                 \
       --with-apxs2=/usr/local/bin/apxs                            \
       --with-openssl                                              \
       --with-curl                                                 \
@@ -53,12 +54,9 @@ RUN cd /tmp;                                                      \
 
 ADD www /www
 
-RUN sudo chown -R default: /www
-RUN sudo ln -s /usr/local/modules /www/modules
-
 EXPOSE 8080
 
 CMD [ "apachectl",             \
-      "-d", "/www",            \
+      "-d", "/usr/local",      \
       "-f", "/www/httpd.conf", \
       "-DFOREGROUND" ]

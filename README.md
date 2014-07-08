@@ -30,7 +30,39 @@ docker run -p 8080:8080 d11wtq/php
 Accessing http://localhost:8080/ should show the PHP Info page and Apache logs
 should be written to stdout.
 
+### Defaults
+
+I have made no attempts to create an exhaustive configuration for PHP and
+Apache, rather focusing on setting a handful of minimal and sensible defaults
+and ensuring it is easy to override these defaults. In summary, the defaults
+are:
+
+  * Apache
+    - mod_dir
+    - mod_authz_core
+    - mod_unixd
+    - mod_mime
+    - mod_log_config
+    - mod_access_compat
+    - mod_php5
+    - Forking (not MPM)
+    - Port 8080
+    - Default charset 'UTF-8'
+    - Loglevel 'info'
+    - Logging to stdout
+  * PHP
+    - error_reporting E_ALL
+    - display_errors On
+    - short_open_tag Off
+    - default_charset 'UTF-8'
+    - date.timezone 'UTC'
+    - memory_limit 128M
+    - post_max_size 32M
+    - upload_max_filesize 8M
+
 ### Configuration
+
+#### Apache
 
 The document root is set to /www/htdocs/ and you are expected to mount this
 directory as a volume, or add it to the container, using this image as the base
@@ -43,15 +75,17 @@ Extending the basic Apache 2 configuration can be done by adding \*.conf files
 to /www/httpd.conf.d/, again either by mounting a volume, or by using this
 image as a base image.
 
+#### PHP
+
 The main php.ini file resides in /www/php.ini, though it is kept to a minimum.
 
 Extending the PHP configuration can be done by adding \*.ini files to
 /www/php.ini.d/ using a volume, or by using this image as a base image. The
 default configuration is both minimal and strict.
 
-If you know what's you're doing, feel free to mount the entire /www/ directory
+If you know what you're doing, feel free to mount the entire /www/ directory
 as a volume and disregard the above, but make sure it contains at least an
-httpd.conf.
+httpd.conf. Both Apache and PHP have been installed with `--prefix=/usr/local`.
 
 ### Web Access
 
@@ -129,4 +163,4 @@ container:
 docker run -ti d11wtq/php /bin/bash
 ```
 
-The same configuration file is used for the CLI as for Apache.
+By default the same configuration file is used for the CLI as for Apache.
