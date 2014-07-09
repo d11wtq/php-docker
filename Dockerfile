@@ -54,6 +54,7 @@ RUN cd /tmp;                                                      \
       --with-pgsql                                                \
       --with-pdo-pgsql                                            \
       --enable-mbstring                                           \
+      --with-xmlrpc                                               \
       ;                                                           \
     make && make install;                                         \
     cd; rm -rf /tmp/php-*
