@@ -4,10 +4,11 @@ FROM       d11wtq/ubuntu
 MAINTAINER Chris Corbyn <chris@w3style.co.uk>
 
 RUN sudo apt-get install -qq -y \
-    sendmail-base               \
     libapr1-dev                 \
     libaprutil1-dev             \
-    libcurl4-openssl-dev
+    libcurl4-openssl-dev        \
+    libmysqlclient-dev          \
+    libpq-dev
 
 RUN cd /tmp;                                                             \
     curl -LO http://apache.mirror.uber.com.au/httpd/httpd-2.4.9.tar.bz2; \
@@ -47,6 +48,11 @@ RUN cd /tmp;                                                      \
       --with-bz2                                                  \
       --with-gettext                                              \
       --with-mhash                                                \
+      --with-mysql                                                \
+      --with-mysqli                                               \
+      --with-pdo-mysql                                            \
+      --with-pgsql                                                \
+      --with-pdo-pgsql                                            \
       --enable-mbstring                                           \
       ;                                                           \
     make && make install;                                         \
