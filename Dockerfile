@@ -8,7 +8,10 @@ RUN sudo apt-get install -qq -y \
     libaprutil1-dev             \
     libcurl4-openssl-dev        \
     libmysqlclient-dev          \
-    libpq-dev
+    libpq-dev                   \
+    libvpx-dev                  \
+    libjpeg-dev                 \
+    libpng-dev
 
 RUN cd /tmp;                                                             \
     curl -LO http://apache.mirror.uber.com.au/httpd/httpd-2.4.9.tar.bz2; \
@@ -55,6 +58,7 @@ RUN cd /tmp;                                                      \
       --with-pdo-pgsql                                            \
       --enable-mbstring                                           \
       --with-xmlrpc                                               \
+      --with-gd                                                   \
       ;                                                           \
     make && make install;                                         \
     cd; rm -rf /tmp/php-*
