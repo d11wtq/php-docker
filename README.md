@@ -2,8 +2,6 @@
 
 > In the same manner is LAMP, MAMP and WAMP, I should have called this DAMP.
 
-**WORK IN PROGRESS, DO NOT USE**
-
 This is a docker container for running PHP 5 applications under Apache 2. It is
 designed to be very minimal, but in such a way that extending it is easy.
 Apache listens on port 8080 inside the container and runs in the foreground
@@ -31,6 +29,10 @@ Accessing http://localhost:8080/ should show the PHP Info page and Apache logs
 should be written to stdout.
 
 ### Defaults
+
+> **WARNING** `sendmail_path` is set to /bin/true, effectively disabling
+> the `mail()` function. Pull requests welcomed that provide a light wrapper
+> to send mail directly to the MX, without depending on a daemon.
 
 I have made no attempts to create an exhaustive configuration for PHP and
 Apache, rather focusing on setting a handful of minimal and sensible defaults

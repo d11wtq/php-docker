@@ -3,6 +3,7 @@
 FROM       d11wtq/ubuntu
 MAINTAINER Chris Corbyn <chris@w3style.co.uk>
 
+RUN sudo apt-get update -qq -y
 RUN sudo apt-get install -qq -y \
     libapr1-dev                 \
     libaprutil1-dev             \
@@ -66,8 +67,7 @@ RUN cd /tmp;                                                      \
 ADD www /www
 
 EXPOSE 8080
-
-CMD [ "apachectl",             \
-      "-d", "/usr/local",      \
-      "-f", "/www/httpd.conf", \
-      "-DFOREGROUND" ]
+CMD    [ "apachectl", \
+         "-d", "/usr/local", \
+         "-f", "/www/httpd.conf", \
+         "-DFOREGROUND" ]
