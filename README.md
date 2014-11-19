@@ -13,8 +13,8 @@ use MySQL, PgSQL, SQLite3, GD etc without doing anything special.
 ## Usage
 
 Apache is run in the foreground with a minimal config that can be found at in
-the [www/](https://github.com/d11wtq/php-docker/blob/master/www) directory of
-the GitHub repository for this container.
+the [www/](https://github.com/d11wtq/apache-docker/blob/master/www) directory
+of the GitHub repository for the Apache image on which this is based.
 
 ### Testing
 
@@ -39,45 +39,32 @@ Apache, rather focusing on setting a handful of minimal and sensible defaults
 and ensuring it is easy to override these defaults. In summary, the defaults
 are:
 
-  * Apache
-    - mod_dir
-    - mod_authz_core
-    - mod_unixd
-    - mod_mime
-    - mod_log_config
-    - mod_access_compat
-    - mod_php5
-    - Forking (not MPM)
-    - Port 8080
-    - Default charset 'UTF-8'
-    - Loglevel 'info'
-    - Logging to stdout
-  * PHP
-    - error_reporting E_ALL
-    - display_errors On
-    - short_open_tag Off
-    - default_charset 'UTF-8'
-    - date.timezone 'UTC'
-    - memory_limit 128M
-    - post_max_size 32M
-    - upload_max_filesize 8M
+  * error_reporting E_ALL
+  * display_errors On
+  * short_open_tag Off
+  * default_charset 'UTF-8'
+  * date.timezone 'UTC'
+  * memory_limit 128M
+  * post_max_size 32M
+  * upload_max_filesize 8M
+
+For the Apache default, refer to
+[d11wtq/apache-docker](https://github.com/d11wtq/apache-docker).
 
 ### Configuration
 
 #### Apache
 
+See: [d11wtq/apache-docker](https://github.com/d11wtq/apache-docker).
+
 The document root is set to /www/htdocs/ and you are expected to mount this
 directory as a volume, or add it to the container, using this image as the base
 image.
 
-The main httpd.conf file resides in /www/httpd.conf, however it only loads some
-essential modules in order for Apache to function.
-
-Extending the basic Apache 2 configuration can be done by adding \*.conf files
-to /www/httpd.conf.d/, again either by mounting a volume, or by using this
-image as a base image.
-
 #### PHP
+
+> **NOTE**: The libphp5.so and associated config are loaded from an
+> httpd.conf.d/ file that extends the base Apache configuration.
 
 The main php.ini file resides in /www/php.ini, though it is kept to a minimum.
 
@@ -115,6 +102,10 @@ index.php from WordPress. The contents of /path/to/conf.d/ would be a file
 named mod_rewrite.conf, with the contents:
 
 ``` apache
+DirectoryIndex index.html index.php
+AddType        application/x-httpd-php .php
+
+LoadModule php5_module    modules/libphp5.so
 LoadModule rewrite_module modules/mod_rewrite.so
 ```
 
